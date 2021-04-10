@@ -6,7 +6,7 @@ const axios = require("axios");
 
 router.get("/lineup", async (request, response) => {
   try {
-    
+   
      const emmiterId = 1337; 
      const apiResponse = await axios.get(`https://epg-api.video.globo.com/programmes/${emmiterId}?date=${request.query.dateRef}`)
 
