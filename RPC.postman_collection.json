@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "cf73f42d-b2f6-41a1-8826-f5073dd91482",
+		"name": "RPC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/lineup/rpc/now LocalHost",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/lineup/rpc/now",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"lineup",
+						"rpc",
+						"now"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/lineup?dateRef= LocalHost",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/lineup?dateRef=2021-04-10",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"lineup"
+					],
+					"query": [
+						{
+							"key": "dateRef",
+							"value": "2021-04-10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/lineup/rpc/now Heroku",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rpcapi.herokuapp.com/api/lineup/rpc/now",
+					"protocol": "https",
+					"host": [
+						"rpcapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"lineup",
+						"rpc",
+						"now"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/lineup?dateRef= Heroku",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rpcapi.herokuapp.com/api/lineup?dateRef=2021-04-10",
+					"protocol": "https",
+					"host": [
+						"rpcapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"lineup"
+					],
+					"query": [
+						{
+							"key": "dateRef",
+							"value": "2021-04-10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

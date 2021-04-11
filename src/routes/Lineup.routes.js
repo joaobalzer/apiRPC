@@ -87,13 +87,13 @@ router.get("/lineup", async (request, response) => {
     const responseEntries = apiResponse.data.programme.entries;
     const programmesLength = responseEntries.length;
 
-    var arrayOfTitles = [];
-    var arrayOfStartTime = [];
-    var arrayOfEndTime = [];
+
+    let programmesFilteredArray=[]
 
     for (var i = programmesLength; i >= 1; i--) {
       const arrayTitleVariables = responseEntries[i - 1].title;
-      arrayOfTitles.push(arrayTitleVariables);
+      const arrayDescriptionVariables = responseEntries[i - 1].description;
+      const arrayProgrammeImageVariables = responseEntries[i - 1].custom_info.Graficos.ImagemURL;
       let convertedStartTimeHour2 =
         responseEntries[i - 1].human_start_time.split(":")[0] - 3;
       if (convertedStartTimeHour2 < 0) {
@@ -112,15 +112,18 @@ router.get("/lineup", async (request, response) => {
         i - 1
       ].human_end_time.split(":")[1];
       const endTimeGmt = `${convertedEndTimeHour2}:${convertedEndTimeMinutes2}`;
-      arrayOfStartTime.push(startTimeGmt);
-      arrayOfEndTime.push(endTimeGmt);
+      let programmesFiltered= {
+        title: arrayTitleVariables,
+        startTime: startTimeGmt,
+        endTime: endTimeGmt,
+        description :arrayDescriptionVariables,
+        image: arrayProgrammeImageVariables
+      }; 
+      programmesFilteredArray.push(programmesFiltered);
     }
-
-    const object = Object.assign({},  arrayOfTitles); 
-
     return response.status(200).json({
       status: 200,
-      data: [object],
+      data:  programmesFilteredArray,
       meta: null,
       message: `Dados da programação, encontrados com sucesso`,
     });
