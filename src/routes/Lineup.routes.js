@@ -7,48 +7,53 @@ const axios = require("axios");
 router.get("/lineup/rpc/now", async (request, response) => {
   try {
     const emmiterId = 1337;
-    const todaysDate = new Date().toISOString().split("T")[0];
+    var userAcessDate = new Date();
+    const formatedUserDate = userAcessDate.setHours(
+      userAcessDate.getHours() - 3
+    );
+    const todaysDate = new Date(formatedUserDate).toISOString().split("T")[0];
     const apiResponse = await axios.get(
       `https://epg-api.video.globo.com/programmes/${emmiterId}?date=${todaysDate}`
     );
+
     const responseEntries = apiResponse.data.programme.entries;
     const programmesLength = responseEntries.length;
-    const title = responseEntries[1].title;
-
-    var arrayOfTitles = [];
-    var arrayOfStartTime = [];
-    var arrayOfEndTime = [];
-    var arrayOfMatchStartTime = [];
-    var arrayOfMatchEndTime = [];
-
-    for (var i = programmesLength; i >= 1; i--) {
-      const arrayTitleVariables = responseEntries[i - 1].title;
-      const unformatedStartTime = responseEntries[i - 1].human_start_time;
-      const unformatedEndTime = responseEntries[i - 1].human_end_time;
-      const convertedEndTime = unformatedEndTime.split(":00+")[0];
-      const convertedStartTime = unformatedStartTime.split(":00+")[0];
-      arrayOfTitles.push(arrayTitleVariables);
-      arrayOfStartTime.push(convertedStartTime);
-      arrayOfEndTime.push(convertedEndTime);
-    }
     var nowProgramIndex = [];
-    const compareDate = Date.now()/1000
+    const compareDate = Date.now() / 1000;
+
     for (var i = programmesLength; i >= 1; i--) {
       const startTime = responseEntries[i - 1].start_time;
       const endTime = responseEntries[i - 1].end_time;
       var indexValue = [i - 1];
-      if(compareDate > startTime &&  compareDate < endTime ){
-      nowProgramIndex .push(indexValue);
+      if (compareDate > startTime && compareDate < endTime) {
+        nowProgramIndex.push(indexValue);
       }
     }
-
-    const nowOnTv = { 
-      "nowTitle" : responseEntries[nowProgramIndex].title,
-      "nowStartTime" : arrayOfStartTime[nowProgramIndex],
-      "nowEndTime" : arrayOfEndTime[nowProgramIndex],
+    let convertedStartTimeHour2 =
+      responseEntries[nowProgramIndex].human_start_time.split(":")[0] - 3;
+    if (convertedStartTimeHour2 < 0) {
+      convertedStartTimeHour2 = convertedStartTimeHour2 + 24;
     }
-    console.log(nowOnTv)
+    const convertedStartTimeMinutes2 = responseEntries[
+      nowProgramIndex
+    ].human_start_time.split(":")[1];
+    let convertedEndTimeHour2 =
+      responseEntries[nowProgramIndex].human_end_time.split(":")[0] - 3;
+    if (convertedEndTimeHour2 < 0) {
+      convertedEndTimeHour2 = convertedEndTimeHour2 + 24;
+    }
+    const convertedEndTimeMinutes2 = responseEntries[
+      nowProgramIndex
+    ].human_end_time.split(":")[1];
 
+    const startTimeGmt = `${convertedStartTimeHour2}:${convertedStartTimeMinutes2}`;
+    const endTimeGmt = `${convertedEndTimeHour2}:${convertedEndTimeMinutes2}`;
+
+    const nowOnTv = {
+      nowTitle: responseEntries[nowProgramIndex].title,
+      nowStartTime: startTimeGmt,
+      nowEndTime: endTimeGmt,
+    };
 
     return response.status(200).json({
       status: 200,
@@ -70,13 +75,52 @@ router.get("/lineup/rpc/now", async (request, response) => {
 router.get("/lineup", async (request, response) => {
   try {
     const emmiterId = 1337;
+    var userAcessDate = new Date();
+    const formatedUserDate = userAcessDate.setHours(
+      userAcessDate.getHours() - 3
+    );
+    const todaysDate = new Date(formatedUserDate).toISOString().split("T")[0];
     const apiResponse = await axios.get(
       `https://epg-api.video.globo.com/programmes/${emmiterId}?date=${request.query.dateRef}`
     );
 
+    const responseEntries = apiResponse.data.programme.entries;
+    const programmesLength = responseEntries.length;
+
+    var arrayOfTitles = [];
+    var arrayOfStartTime = [];
+    var arrayOfEndTime = [];
+
+    for (var i = programmesLength; i >= 1; i--) {
+      const arrayTitleVariables = responseEntries[i - 1].title;
+      arrayOfTitles.push(arrayTitleVariables);
+      let convertedStartTimeHour2 =
+        responseEntries[i - 1].human_start_time.split(":")[0] - 3;
+      if (convertedStartTimeHour2 < 0) {
+        convertedStartTimeHour2 = convertedStartTimeHour2 + 24;
+      }
+      const convertedStartTimeMinutes2 = responseEntries[
+        i - 1
+      ].human_start_time.split(":")[1];
+      const startTimeGmt = `${convertedStartTimeHour2}:${convertedStartTimeMinutes2}`;
+      let convertedEndTimeHour2 =
+        responseEntries[i - 1].human_end_time.split(":")[0] - 3;
+      if (convertedEndTimeHour2 < 0) {
+        convertedEndTimeHour2 = convertedEndTimeHour2 + 24;
+      }
+      const convertedEndTimeMinutes2 = responseEntries[
+        i - 1
+      ].human_end_time.split(":")[1];
+      const endTimeGmt = `${convertedEndTimeHour2}:${convertedEndTimeMinutes2}`;
+      arrayOfStartTime.push(startTimeGmt);
+      arrayOfEndTime.push(endTimeGmt);
+    }
+
+    const object = Object.assign({},  arrayOfTitles); 
+
     return response.status(200).json({
       status: 200,
-      data: [apiResponse.data.programme],
+      data: [object],
       meta: null,
       message: `Dados da programação, encontrados com sucesso`,
     });
