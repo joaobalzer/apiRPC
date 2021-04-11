@@ -18,7 +18,9 @@
 
 > The api is deployed at heroku in the link: https://rpcapi.herokuapp.com/
 > The api have 2 routes:
+
  -GET . /lineup/rpc/now.  Example:(https://rpcapi.herokuapp.com/api/lineup/rpc/now) wich you can see in the highlight the program that is LIVE, and all the other programs 
 - GET . /lineup?dateRef=YYYY-MM-DD Example: (https://rpcapi.herokuapp.com/api/lineup?dateRef=2021-04-10)  wich you can see all the programmes of an specific filter with information Based in (https://redeglobo.globo.com/sao-paulo/programacao/)
+
 > Any other questions of the usage  you can check the postman colletion in this repository
 
