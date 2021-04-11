@@ -10,7 +10,8 @@
 },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.2",
