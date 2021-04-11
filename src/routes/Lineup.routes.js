@@ -30,7 +30,7 @@ router.get("/lineup/rpc/now", async (request, response) => {
       }
     }
 
-    if ( nowProgramIndex= []) {
+    if (nowProgramIndex,length = 0 ) {
       var today = new Date();
       const yesterday = today.setDate(today.getDate() - 1);
       const yesterdayDate = new Date(yesterday).toISOString().split("T")[0];
